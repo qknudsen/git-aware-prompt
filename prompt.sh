@@ -20,7 +20,19 @@ find_git_dirty() {
   fi
 }
 
-PROMPT_COMMAND="find_git_branch; find_git_dirty; $PROMPT_COMMAND"
+check_exclude_list() {
+  # FIXME Allow configuration
+  local exclude_list=*chromium*
+  if [[ $(pwd) == $exclude_list ]]; then 
+    git_branch="(?)"
+    git_dirty='?'
+  else
+    find_git_branch
+    find_git_dirty 
+  fi
+}
+
+PROMPT_COMMAND="check_exclude_list"
 
 # Default Git enabled prompt with dirty state
 # export PS1="\u@\h \w \[$txtcyn\]\$git_branch\[$txtred\]\$git_dirty\[$txtrst\]\$ "
